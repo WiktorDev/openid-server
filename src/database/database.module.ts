@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DataSource } from 'typeorm';
 import { User } from './models/user.model';
+import { UserRepository } from "./repositories/user.repository";
 
 @Module({
   imports: [
@@ -23,6 +24,9 @@ import { User } from './models/user.model';
         return await new DataSource(options).initialize();
       },
     }),
+    TypeOrmModule.forFeature([User]),
   ],
+  providers: [UserRepository],
+  exports: [UserRepository]
 })
 export class DatabaseModule {}
