@@ -1,9 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import configuration from "./config/configuration";
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(configuration().port);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.useStaticAssets(join(__dirname, '..', 'resources', 'public'));
+  app.setBaseViewsDir(join(__dirname, '..', 'resources', 'views'));
+  app.setViewEngine('hbs');
+
+  await app.listen(3000);
 }
 bootstrap();
